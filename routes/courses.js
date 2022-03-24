@@ -11,66 +11,74 @@ const router = express.Router();
 
 
 //show all courses 
-router.get("/", asyncHandler(async(req, res) => {
-    const coursess = await Course.findAll({ 
+router.get("/", asyncHandler(async(req, res, next) => {
+    const courses = await Course.findAll({ 
         attributes: ["id", "title", "description", "UserId"],
         include: [
             {
                 model: User,
-                attributes: ["id", "firstName", "lastName", "email"]
+                attributes: ["id", "firstName", "lastName", "emailAddress"]
             }
         ] 
     });
-    if (coursess.length > 0) {
-        res.status(200).json(coursess);
+    if (courses.length !== 0) {
+        res.status(200).json(courses);
     } else {
         console.log({message: "Sorry, no courses found. :(" })
-        return err
+        next(err) 
     }
 }));
 
 //sellect a course
-router.get("/:id", asyncHandler(async(req, res) => {
+router.get("/:id", asyncHandler(async(req, res, next) => {
     const reqID = req.params.id
-    const coursess = await Course.findOne({where: {id: reqID}})
-    if (coursess) {
-        res.status(200).json(coursess)
+    const courses = await Course.findOne({where: {id: reqID}})
+    if (courses) {
+        res.status(200).json(courses)
     } else {
-        return err
+        next(err)
     } 
 }));
 
 //create a course
-router.post("/", authenticateUser, asyncHandler(async(req, res) => {
+router.post("/", authenticateUser, asyncHandler(async(req, res, next) => {
     console.log()
     const courses = await Course.create(req.body)
-    const reqID = courses.id
+    if (courses) {
+        const reqID = courses.id
         res
+            .send('successfully created the course')
             .status(201)
             .location(`/courses/${reqID}`)
             .end()
+    } else {
+        next(err) 
+    }
+
 })); 
 
 //update a course
-router.put("/:id", authenticateUser, asyncHandler(async(req, res) => {
+router.put("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
     const reqID = req.params.id
-    const coursess = await Course.findOne({where: {id: reqID}})
-    const courseUpdate = await coursess.update(req.body)
+    const courses = await Course.findOne({where: {id: reqID}})
+    const courseUpdate = await courses.update(req.body)
     if (courseUpdate) {
-        res.send(courseUpdate).status(204)
+        res.send('successfully updated course!')
+        .status(204)
     } else {
-        return err
+        next(err)
     }
 }));
 
 //delete a course
-router.delete("/:id", authenticateUser, asyncHandler(async(req, res) => {
+router.delete("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
     const reqID = req.params.id
-    const coursess = await Course.destroy({where: {id: reqID}})
-    if (coursess) {
-        res.status(204).send('deleted')
+    const courses = await Course.destroy({where: {id: reqID}})
+    if (courses) {
+        res.send('successfully deleted the course!')
+            .status(204)
     } else {
-        return err
+        next(err) 
     }
 }));
 

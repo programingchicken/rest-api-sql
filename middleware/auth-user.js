@@ -9,7 +9,7 @@ console.log(1)
     const credentials = auth(req)
 
     if (credentials) {
-        const user = await User.findOne({ where: { email: credentials.name } })
+        const user = await User.findOne({ where: { emailAddress: credentials.name } })
         console.log(2)
         if (user) {
             //dont completly understand got this code from example on treehouse
@@ -17,16 +17,16 @@ console.log(1)
                 .compareSync(credentials.pass, user.password);
                 console.log(3)
             if (authenticated) {
-                console.log(`Authentication successful for email: ${user.email}`);
+                console.log(`Authentication successful for emailAddress: ${user.emailAddress}`);
                 // Store the user on the Request object.
                 req.currentUser = user;
                 console.log(req.currentUser)
                 console.log(4)
             } else {
-                warningText = `Authentication failure for email: ${user.email}`;
+                warningText = `Authentication failure for emailAddress: ${user.emailAddress}`;
             }  
         } else {
-            warningText = `User not found for email: ${credentials.email}`;
+            warningText = `User not found for emailAddress: ${credentials.emailAddress}`;
         }
     } else {
         warningText = 'Auth header not found';

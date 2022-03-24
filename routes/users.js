@@ -16,17 +16,18 @@ router.get('/', authenticateUser, asyncHandler(async(req, res) => {
   }));
 
   //create a user
-router.post('/', asyncHandler(async(req, res) => {
+router.post('/', asyncHandler(async(req, res, next) => {
     console.log(req.body)
 
     const user = await User.create(req.body)
     if(user) {
         res
+        .send('You have created the user!')
         .status(201)
         .location("/")
         .end()
     } else {
-        return err
+        next(err) 
     }
   }));
 
@@ -35,7 +36,6 @@ router.post('/', asyncHandler(async(req, res) => {
 // {
 //     "firstName": "Gabe",
 //     "lastName": "Powers",
-//     "email": "userGabe@mail.com",
+//     "emailAddress": "userGabe@mail.com",
 //     "password": "P4ssword",
-//     "confirmedPassword": "P4ssword"
 // }

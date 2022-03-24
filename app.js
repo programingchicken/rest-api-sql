@@ -32,7 +32,7 @@ app.use(/*this is middle ware*/express.json());
 
 
 sequelize.authenticate(console.log('db is running'))
-sequelize.sync({ /*Use to force the sync on database*/ force: true}).then(() => console.log('db is ready'))
+sequelize.sync(/*{ Use to force the sync on databas force: true}*/).then(() => console.log('db is ready'))
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 

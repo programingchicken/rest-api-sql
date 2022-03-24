@@ -46,8 +46,9 @@ router.post("/", authenticateUser, asyncHandler(async(req, res, next) => {
     const courses = await Course.create(req.body)
     if (courses) {
         const reqID = courses.id
+        console.log('successfully created the course')
         res
-            .send('successfully created the course')
+        // .send('successfully created the course')
             .status(201)
             .location(`/courses/${reqID}`)
             .end()
@@ -63,7 +64,9 @@ router.put("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
     const courses = await Course.findOne({where: {id: reqID}})
     const courseUpdate = await courses.update(req.body)
     if (courseUpdate) {
-        res.send('successfully updated course!')
+        console.log('successfully updated course!')
+        res
+        // .send('successfully updated course!')
         .status(204)
     } else {
         next(err)
@@ -75,7 +78,9 @@ router.delete("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
     const reqID = req.params.id
     const courses = await Course.destroy({where: {id: reqID}})
     if (courses) {
-        res.send('successfully deleted the course!')
+        console.log('successfully deleted the course!')
+        res
+            // .send('successfully deleted the course!')
             .status(204)
     } else {
         next(err) 

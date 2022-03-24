@@ -21,8 +21,8 @@ router.post('/', asyncHandler(async(req, res, next) => {
 
     const user = await User.create(req.body)
     if(user) {
+      console.log('You have created the user!')
         res
-        .send('You have created the user!')
         .status(201)
         .location("/")
         .end()

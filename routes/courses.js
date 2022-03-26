@@ -82,6 +82,7 @@ router.delete("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
         res
             // .send('successfully deleted the course!')
             .status(204)
+            .end()
     } else {
         next(err) 
     }

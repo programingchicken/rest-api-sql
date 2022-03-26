@@ -2,41 +2,45 @@ const auth = require('basic-auth');
 const  User  = require('../models').User;
 const bcrypt = require('bcrypt');
 
-
 // Middleware to authenticate the request using Basic Auth.
-exports.authenticateUser = async(req, res, next) => {
-    //empty var to hold error text
-    let errorText
+exports.authenticateUser = async (req, res, next) => {
 
-    //gets the auth user
-    const isAuth = auth(req)
+    //this is a empty text var with a warning 
+    let warningText;
 
-    if(isAuth) {
+    //this is the auth user
+    const credentials = auth(req)
 
-        //gets user from database
-        const user = await User.findOne({where: {emailAddress: isAuth.name}})
+    //test if it is true
+    if (credentials) {
+        //finds the user in the database
+        const user = await User.findOne({ where: { emailAddress: credentials.name } })
 
+        //if it finds user in database
         if (user) {
-            //checks if the user password matched the auth password
-            const theTrueAuth = bcrypt
-                .compareSync(isAuth.pass, user.password)
-            if (theTrueAuth) {
-                req.currentUser = user;
-                res.send(`Authentication successful for emailAddress: ${user.emailAddress}`)
-            } else {
-                errorText = `Authentication failure for emailAddress: ${user.emailAddress}`;
-            }
 
+            //check if auth user pass matches database user password
+            const authenticated = bcrypt
+                .compareSync(credentials.pass, user.password);
+            //if compareSync true
+            if (authenticated) {
+                console.log(`Authentication successful for emailAddress: ${user.emailAddress}`);
+                // Store the user on the Request object.
+                req.currentUser = user;
+                console.log(req.currentUser)
+            } else {
+                warningText = `Authentication failure for emailAddress: ${user.emailAddress}`;
+            }  
         } else {
-            errorText = `User not found for emailAddress: ${credentials.emailAddress}`;
+            warningText = `User not found for emailAddress: ${credentials.emailAddress}`;
         }
     } else {
-        errorText = 'Auth header not found';
+        warningText = 'Auth header not found';
     }
 
-    if (errorText) {
-        console.warn(errorText);
-        res.status(401).json({ errorText: 'Access Denied' });
+    if (warningText) {
+        console.warn(warningText);
+        res.status(401).json({ warningText: 'Access Denied' });
       } else {
         next();
       }

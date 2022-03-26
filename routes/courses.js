@@ -22,7 +22,7 @@ router.get("/", asyncHandler(async(req, res, next) => {
         ] 
     });
     if (courses.length !== 0) {
-        res.status(200).json(courses);
+        res.status(200).json(courses).end();
     } else {
         console.log({message: "Sorry, no courses found. :(" })
         next(err) 
@@ -34,7 +34,7 @@ router.get("/:id", asyncHandler(async(req, res, next) => {
     const reqID = req.params.id
     const courses = await Course.findOne({where: {id: reqID}})
     if (courses) {
-        res.status(200).json(courses)
+        res.status(200).json(courses).end()
     } else {
         next(err)
     } 
@@ -68,6 +68,7 @@ router.put("/:id", authenticateUser, asyncHandler(async(req, res, next) => {
         res
         // .send('successfully updated course!')
         .status(204)
+        .end()
     } else {
         next(err)
     }

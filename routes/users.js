@@ -12,7 +12,7 @@ const router = express.Router();
   //gets a user if authenticateded
 router.get('/', authenticateUser, asyncHandler(async(req, res) => {
     const user = req.currentUser
-        res.json(user).status(200);
+        res.json(user).status(200).end();
   }));
 
   //create a user

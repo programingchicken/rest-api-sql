@@ -8,10 +8,10 @@ exports.asyncHandler = (cb) => {
             // new book error
             if (err.name === 'SequelizeValidationError') {
                 //didnt find page error
-                res.status(400).send(err.message)
+                res.status(400).json(`ERROR:`+ err.message).end()
             } else if (err.name === 'GlobalErrorHandler'){
                 console.log('didnt find server')
-                res.status(500).send(err.message)
+                res.status(500).json(`ERROR:`+ err.message).end()
             } else {
                 next()
             }

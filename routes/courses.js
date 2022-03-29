@@ -17,7 +17,7 @@ const router = express.Router();
 //show all courses 
 router.get("/", asyncHandler(async (req, res, next) => {
     const courses = await Course.findAll({
-        attributes: ["id", "title", "description", "UserId"],
+        attributes: ["id", "title", "description", "userId"],
         include: [
             {
                 model: User,
@@ -72,7 +72,7 @@ router.put("/:id", authenticateUser, validate, asyncHandler(async (req, res, nex
                 if (!errors.isEmpty()) {
                     const arrayErr = errors.array()
                     const messageArray = arrayErr.map((err) => err.msg)
-                    return res.status(400).json(`ERROR:` + messageArray)
+                    return res.status(400).json(messageArray)
                 } else {
                     await Course.update(req.body, { where: { id: reqID } })
                     console.log('successfully updated course!')
@@ -108,5 +108,5 @@ module.exports = router
 //     "description": "JavaScript with Sequelize",
 //     "estimatedTime": "40 hours",
 //     "materialsNeeded": "JavaScript, ExpressJS, Sequelize",
-//     "UserId": 1
+//     "userId": 1
 // }

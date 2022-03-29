@@ -71,7 +71,7 @@ module.exports = (sequelize) => {
     // define association here
     User.hasMany(models.Course, {
       foreignKey: {
-        fieldName: 'UserId',
+        fieldName: 'userId',
         allowNull: false,
       },
     });

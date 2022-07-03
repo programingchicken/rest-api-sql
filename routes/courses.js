@@ -15,7 +15,7 @@ const router = express.Router();
 ]
 
 //show all courses 
-router.get("/", asyncHandler(async (req, res, next) => {
+router.get("/courses", asyncHandler(async (req, res, next) => {
     const courses = await Course.findAll({
         attributes: ["id", "title", "description", "userId"],
         include: [
@@ -34,7 +34,7 @@ router.get("/", asyncHandler(async (req, res, next) => {
 }));
 
 //sellect a course
-router.get("/:id", asyncHandler(async (req, res, next) => {
+router.get("/courses/:id", asyncHandler(async (req, res, next) => {
     const reqID = req.params.id
     const courses = await Course.findOne({ where: { id: reqID } })
     if (courses) {
@@ -45,7 +45,7 @@ router.get("/:id", asyncHandler(async (req, res, next) => {
 }));
 
 //create a course
-router.post("/", authenticateUser, asyncHandler(async (req, res, next) => {
+router.post("/courses", authenticateUser, asyncHandler(async (req, res, next) => {
     console.log()
     const courses = await Course.create(req.body)
     if (courses) {
@@ -63,7 +63,7 @@ router.post("/", authenticateUser, asyncHandler(async (req, res, next) => {
 }));
 
 //update a course
-router.put("/:id", authenticateUser, validate, asyncHandler(async (req, res, next) => {
+router.put("/courses/:id", authenticateUser, validate, asyncHandler(async (req, res, next) => {
             const reqID = req.params.id
             const course = await Course.findOne({ where: { id: reqID } })
             // await courses.update(req.body)
@@ -87,7 +87,7 @@ router.put("/:id", authenticateUser, validate, asyncHandler(async (req, res, nex
     ));
 
 //delete a course
-router.delete("/:id", authenticateUser, asyncHandler(async (req, res, next) => {
+router.delete("/courses/:id", authenticateUser, asyncHandler(async (req, res, next) => {
     const reqID = req.params.id
     const courses = await Course.destroy({ where: { id: reqID } })
     if (courses) {

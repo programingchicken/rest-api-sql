@@ -41,8 +41,8 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-app.use('/api/users', userRoute);    
-app.use('/api/courses', courseRoute);
+app.use('/api', userRoute);    
+app.use('/api', courseRoute);
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
@@ -70,7 +70,7 @@ app.use((err, req, res, next) => {
 });
 
 // set our port
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 8000);
 
 
 

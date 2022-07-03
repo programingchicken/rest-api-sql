@@ -10,22 +10,21 @@ const { asyncHandler } = require('../middleware/async-handler');
 const router = express.Router();
 
   //gets a user if authenticateded
-router.get('/', authenticateUser, asyncHandler(async(req, res) => {
+router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
     const user = req.currentUser
         res.json(user).status(200).end();
   }));
 
   //create a user
-router.post('/', asyncHandler(async(req, res, next) => {
+router.post('/users', asyncHandler(async(req, res, next) => {
     console.log(req.body)
 
     const user = await User.create(req.body)
-    if(user) {
+    if (user) {
       console.log('You have created the user!')
         res
-
         .status(201)
-        .location("/")
+        .location(`/`)
         .end()
     } else {
         next(err) 
